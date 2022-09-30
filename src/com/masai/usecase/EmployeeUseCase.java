@@ -7,6 +7,8 @@ import java.util.Scanner;
 import com.masai.bean.Comp_Assign_Eng;
 import com.masai.bean.Complain;
 import com.masai.bean.Employee;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EmployeeException;
 
 public class EmployeeUseCase {
 	
@@ -20,7 +22,7 @@ public class EmployeeUseCase {
 			
 		System.out.println();
 		System.out.println("1. Register a Complaint ");
-		System.out.println("2. Get your Complaint Details ");
+		System.out.println("2. Know About Your Complain Engineer");
 		System.out.println("3. Get Your Complaint History ");
 		System.out.println("4. Change Your Password ");
 		System.out.println("5. LogOut ");
@@ -34,8 +36,15 @@ public class EmployeeUseCase {
 		    String des = sc.next();
 		    System.out.println("Enter The category of Complaint");
 		    String category = sc.next();
-		     String res = emp.regAComp(status, des,category, emp);
-		     System.out.println(res);
+		     String res=null;
+			try {
+				res = emp.regAComp(status, des,category, emp);
+				  System.out.println(res);
+			} catch (ComplainException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		   
 		    
 		}
 		else if(c==2) {
@@ -47,43 +56,59 @@ public class EmployeeUseCase {
 			
 			
 			
-			Comp_Assign_Eng coe =  emp.getCompDetails(compid, emp);
-			
-			if(coe==null) {
-				System.out.println("We will assign an Engineer Soon ");
-			}else {
-			
-			System.out.println("Complaint id : "+coe.getCompid());
-			System.out.println("Complaint Status : "+coe.getStatus());
-			System.out.println("Complaint Description : "+coe.getDes());
-			System.out.println("Complaint Category : "+coe.getCategory());
-			System.out.println("Assigned Engineer : "+coe.getEng_username());
-			System.out.println();
+			Comp_Assign_Eng coe=null;
+			try {
+				coe = emp.getCompDetails(compid, emp);
+
+				System.out.println("Complaint id : "+coe.getCompid());
+				System.out.println("Complaint Status : "+coe.getStatus());
+				System.out.println("Complaint Description : "+coe.getDes());
+				System.out.println("Complaint Category : "+coe.getCategory());
+				System.out.println("Assigned Engineer : "+coe.getEng_username());
+				System.out.println();
+				
+			} catch (ComplainException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			
+			
 		}
 		else if(c==3) {
 			System.out.println("Get Your Complaint History ");
 			System.out.println("===========================");
-			List<Complain> complist = emp.getYourCompHistory(emp);
-			
-			complist.forEach(com->{
-				System.out.println("Complaint Id : "+com.getCompid());
-				System.out.println("Complaint Status : "+com.getStatus());
-				System.out.println("Complaint Des : "+com.getDes());
-				System.out.println("Complaint Category : "+com.getCategory());
-				System.out.println("Assigned Engineer : "+com.getEmp_username());
-				System.out.println("-----------------------------------------");
+			List<Complain> complist=null;
+			try {
+				complist = emp.getYourCompHistory(emp);
+				complist.forEach(com->{
+					System.out.println("Complaint Id : "+com.getCompid());
+					System.out.println("Complaint Status : "+com.getStatus());
+					System.out.println("Complaint Des : "+com.getDes());
+					System.out.println("Complaint Category : "+com.getCategory());
+					System.out.println("Assigned Engineer : "+com.getEmp_username());
+					System.out.println("-----------------------------------------");
+					
+				});
 				
-			});
-			if(complist.size()==0) {
-				System.out.println("We will Assign an Enginner To Your Complain Soon ..");
+			} catch (ComplainException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			
 		}else if(c==4) {
 			System.out.println("Change Your Password ");
 			System.out.println("=====================");
 			System.out.println("Enter new Password ");
 			String newPass = sc.next();
-			String res = emp.changePass(newPass, emp);
+			String res=null;
+			try {
+				res = emp.changePass(newPass, emp);
+			} catch (EmployeeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(res);
 		}else if(c==5) {
 			System.out.println("Thank You ");

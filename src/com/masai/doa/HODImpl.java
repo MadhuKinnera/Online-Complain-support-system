@@ -9,13 +9,15 @@ import java.util.List;
 
 import com.masai.bean.Complain;
 import com.masai.bean.Engineer;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EngineerException;
 import com.masai.utility.DBUtil;
 
 public class HODImpl implements HODdoa{
 
 
 	@Override
-	public List<Engineer> getAllEng() {
+	public List<Engineer> getAllEng() throws EngineerException{
 		List<Engineer> englist= new ArrayList<>();
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -24,18 +26,25 @@ public class HODImpl implements HODdoa{
 			
 			ResultSet rs =  ps.executeQuery();
 			
+			boolean flag=true;
+			
 			while(rs.next()) {
+				flag=false;
 				String username= rs.getString("username");
 				String password = rs.getString("password");
 				Engineer eng = new Engineer(username,password);
 				englist.add(eng);
+			}
+			
+			if(flag) {
+				throw new EngineerException("Engineer Not Found ");
 			}
 			  
 		
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EngineerException(e.getMessage());
 		}
 		
 
@@ -44,7 +53,7 @@ public class HODImpl implements HODdoa{
 		}
 
 	@Override
-	public String deleteAnEng(String username) {
+	public String deleteAnEng(String username) throws EngineerException {
 		String msg="deletion failed ";
 		
 		
@@ -56,10 +65,13 @@ public class HODImpl implements HODdoa{
 			
 			int x = ps.executeUpdate();
 			if(x>0) msg=username+" successfully deleted ";
+			else {
+				throw new EngineerException("Engineer Not Found ");
+			}
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EngineerException(e.getMessage());
 		}
 		
 		
@@ -67,7 +79,7 @@ public class HODImpl implements HODdoa{
 	}
 
 	@Override
-	public List<Complain> getAllComp() {
+	public List<Complain> getAllComp() throws ComplainException{
 		List<Complain> complist = new ArrayList<>();
 		
 		try (Connection conn = DBUtil.provideConnection()){
@@ -76,7 +88,10 @@ public class HODImpl implements HODdoa{
 			
 			ResultSet rs =  ps.executeQuery();
 			
+			boolean flag=true;
+			
 			while(rs.next()) {
+				flag=false;
 				int cid = rs.getInt("cid");
 				String status = rs.getString("status");
 				String des = rs.getString("des");
@@ -88,11 +103,15 @@ public class HODImpl implements HODdoa{
 				
 			}
 			
+			if(flag) {
+				throw new ComplainException("Complain Not Found ");
+			}
+			
 			
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		
@@ -101,7 +120,7 @@ public class HODImpl implements HODdoa{
 	}
 
 	@Override
-	public String assignCompToEng(int compid, String eng_username) {
+	public String assignCompToEng(int compid, String eng_username)throws ComplainException{
 		String msg=compid+" is not assigned "+eng_username+" successfully ";
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -116,13 +135,17 @@ public class HODImpl implements HODdoa{
 			int x  = ps.executeUpdate();
 			
 			if(x>0 && y>0 ) msg="Complaint "+compid+" is assigned "+eng_username+" successfully ";
+			else {
+				throw new ComplainException("Values you enter Are Not matching ");
+			}
+			
 			
 			
 			
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		
