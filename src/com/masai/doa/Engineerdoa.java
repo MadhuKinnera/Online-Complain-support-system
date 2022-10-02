@@ -8,11 +8,13 @@ import java.util.List;
 
 import com.masai.bean.Complain;
 import com.masai.bean.Engineer;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EngineerException;
 import com.masai.utility.DBUtil;
 
 public interface Engineerdoa {
 	
-	public static Engineer checkEngineer(String username , String password) {
+	public static Engineer checkEngineer(String username , String password) throws EngineerException {
 		String msg="ENGINEER NOT FOUND ";
 		Engineer eng= null;
 		int flag=0;
@@ -30,11 +32,13 @@ public interface Engineerdoa {
 				 flag=1;
 				 
 				 msg="Enginner Login Successful ";
+			 }else {
+				 throw new EngineerException("Invalid Username or Password ");
 			 }
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EngineerException(e.getMessage());
 			
 		}
 		System.out.println(msg);
@@ -52,7 +56,7 @@ public interface Engineerdoa {
 	}
 	
 	
-	public static String regNewEngineer(String username , String password) {
+	public static String regNewEngineer(String username , String password) throws EngineerException {
 		String msg="Registration failed ";
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -62,10 +66,13 @@ public interface Engineerdoa {
 			ps.setString(2, password);
 			
 			int x = ps.executeUpdate();
-			if(x>0) msg="Engineer Registration Successful ";			
+			if(x>0) msg="Engineer Registration Successful ";
+			else {
+				throw new EngineerException("Engineer Registration failed ");
+			}
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EngineerException(e.getMessage());
 		}
 		
 		return msg;
@@ -73,12 +80,12 @@ public interface Engineerdoa {
 	
 	
 	
-	public List<Complain> getCompsOfYou(Engineer eng);
+	public List<Complain> getCompsOfYou(Engineer eng) throws ComplainException;
 	
-	public String updateCompStatus(int compid,String status,Engineer eng);
+	public String updateCompStatus(int compid,String status,Engineer eng) throws ComplainException;
 	
-	public List<Complain> getCompHistory(Engineer eng);
+	public List<Complain> getCompHistory(Engineer eng) throws ComplainException;
 	
-	public String changePass(String newPass,Engineer eng);
+	public String changePass(String newPass,Engineer eng) throws EngineerException;
 
 }

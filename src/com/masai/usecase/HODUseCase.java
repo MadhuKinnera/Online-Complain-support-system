@@ -10,6 +10,8 @@ import com.masai.doa.EngineerImpl;
 import com.masai.doa.Engineerdoa;
 import com.masai.doa.HODImpl;
 import com.masai.doa.HODdoa;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EngineerException;
 
 public class HODUseCase{
 	
@@ -39,8 +41,15 @@ public class HODUseCase{
 			String username=sc.next();
 			System.out.println("Enter Password");
 			String password = sc.next();
-		    String res = Engineerdoa.regNewEngineer(username, password);
-		    System.out.println(res+"\n");
+		    String res=null;
+			try {
+				res = Engineerdoa.regNewEngineer(username, password);
+				  System.out.println(res+"\n");
+			} catch (EngineerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
 		    
 		    
 			
@@ -49,11 +58,18 @@ public class HODUseCase{
 			System.out.println("The Engineers List ");
 			System.out.println("====================");
 			
-			List<Engineer> englist= hd.getAllEng();
-			englist.forEach(s->{
-				System.out.println("Engineer Username : "+s.getUsername());
-			});
-			System.out.println();
+			List<Engineer> englist=null;
+			try {
+				englist = hd.getAllEng();
+				englist.forEach(s->{
+					System.out.println("Engineer Username : "+s.getUsername());
+				});
+				System.out.println();
+			} catch (EngineerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			
 		}else if(c==3) {
@@ -61,22 +77,36 @@ public class HODUseCase{
 			System.out.println("=================================");
 			System.out.println("Enter Engineer Username to Delete ");
 			String username = sc.next();
-			String res = hd.deleteAnEng(username);
-			System.out.println(res+"\n");
+			String res=null;
+			try {
+				res = hd.deleteAnEng(username);
+				System.out.println(res+"\n");
+			} catch (EngineerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			
 		}
 		else if(c==4) {
 			System.out.println("Displaying all the Raised  Complains ");
 			System.out.println("=====================================");
-		    List<Complain> complist = hd.getAllComp();		
-		    complist.forEach(com->{
-		    	System.out.println("Complain id : "+com.getCompid());
-		    	System.out.println("Complain Status : "+com.getStatus());
-		        System.out.println("Complain Description : "+com.getDes());
-		        System.out.println("Complain Category : "+com.getCategory());
-		        System.out.println("------------------");
-		    });
+		    List<Complain> complist=null;
+			try {
+				complist = hd.getAllComp();
+				 complist.forEach(com->{
+				    	System.out.println("Complain id : "+com.getCompid());
+				    	System.out.println("Complain Status : "+com.getStatus());
+				        System.out.println("Complain Description : "+com.getDes());
+				        System.out.println("Complain Category : "+com.getCategory());
+				        System.out.println("------------------");
+				    });
+			} catch (ComplainException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		   
 		    
 		  
 		    
@@ -87,8 +117,15 @@ public class HODUseCase{
 			int compid= sc.nextInt();
 			System.out.println("Enter Engineer Username ");
 			String username=sc.next();
-			String res = hd.assignCompToEng(compid, username);
-			System.out.println(res);
+			String res=null;
+			try {
+				res = hd.assignCompToEng(compid, username);
+				System.out.println(res);
+			} catch (ComplainException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			
 			

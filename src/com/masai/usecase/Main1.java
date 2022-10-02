@@ -8,6 +8,9 @@ import com.masai.bean.HOD;
 import com.masai.doa.Employeedoa;
 import com.masai.doa.Engineerdoa;
 import com.masai.doa.HODdoa;
+import com.masai.exception.EmployeeException;
+import com.masai.exception.EngineerException;
+import com.masai.exception.HODException;
 
 public class Main1 {
 	
@@ -17,10 +20,13 @@ public class Main1 {
 		System.out.println("Welcome To Hardware And Software Support System ");
 		System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - ");
 		
+		while(true) {
+		
 		System.out.println("1. Login As Admin ");
 		System.out.println("2. Login As Engineeer ");
 		System.out.println("3. Login As Employee ");
 		System.out.println("4. Register As Employee ");
+		System.out.println("5. EXIT");
 	      
 		int n = sc.nextInt();
 	     
@@ -29,7 +35,12 @@ public class Main1 {
 			String username = sc.next();
 			System.out.println("Enter Password ");
 			String password = sc.next();
-			HOD hod = HODdoa.checkHOD(username, password);
+			HOD hod=null;
+			try {
+				hod = HODdoa.checkHOD(username, password);
+			} catch (HODException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();			}
 			if(hod!=null) {
 			HODUseCase hoduc = new HODUseCase();
 			hoduc.selectOptions(hod);
@@ -40,7 +51,13 @@ public class Main1 {
 			String username = sc.next();
 			System.out.println("Enter Password ");
 			String password = sc.next();
-			Engineer eng = Engineerdoa.checkEngineer(username, password);
+			Engineer eng=null;
+			try {
+				eng = Engineerdoa.checkEngineer(username, password);
+			} catch (EngineerException e) {
+				// TODO Auto-generated catch block
+			      e.printStackTrace();
+			}
 			if(eng!=null)
 			EngineerUseCase.getEngineerOptions(eng);
 		
@@ -52,7 +69,13 @@ public class Main1 {
 			String username = sc.next();
 			System.out.println("Enter Password ");
 			String password = sc.next();
-			Employee emp= Employeedoa.checkEmployee(username, password);
+			Employee emp=null;
+			try {
+				emp = Employeedoa.checkEmployee(username, password);
+			} catch (EmployeeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(emp!=null)
 		    EmployeeUseCase.getEmployeeOptions(emp);
 			
@@ -61,14 +84,29 @@ public class Main1 {
 			String username = sc.next();
 			System.out.println("Enter Password To Register ");
 			String password = sc.next();
-			String res = Employeedoa.regEmployee(username, password);
-			System.out.println(res);
-			homepage();
+			String res=null;
+			try {
+				res = Employeedoa.regEmployee(username, password);
+				System.out.println(res);
+				homepage();
+			} catch (EmployeeException e) {
+				e.printStackTrace();
+			}
+			
+		
+			
+		}
+		else if(n==5) {
+			System.out.println("Have A Great Day ");
+			System.exit(0);
 			
 		}
 		else {
 			System.out.println("Invalid Input");		
 			}
+		
+		
+		}
 		
 		
 	}

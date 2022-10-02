@@ -10,12 +10,14 @@ import java.util.List;
 import com.masai.bean.Comp_Assign_Eng;
 import com.masai.bean.Complain;
 import com.masai.bean.Employee;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EmployeeException;
 import com.masai.utility.DBUtil;
 
 public class EmployeeImpl implements Employeedoa{
 
 	@Override
-	public String regAComp(String status,String des,String category,Employee emp) {
+	public String regAComp(String status,String des,String category,Employee emp) throws ComplainException{
 		String msg="Your Complain not Registered ";
 		try (Connection conn = DBUtil.provideConnection()) {
 			PreparedStatement ps =  conn.prepareStatement("insert into complain(status,des,category,emp_username) values(?,?,?,?)");
@@ -40,14 +42,14 @@ public class EmployeeImpl implements Employeedoa{
 				complainid=rs.getInt("cid");
 				msg="Your Complain Id "+complainid;
 			}else {
-				System.out.println("Complain Not Found");
+				throw new ComplainException("Complain Registration failed ");
 			}
 			
 					
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 	
@@ -57,7 +59,7 @@ public class EmployeeImpl implements Employeedoa{
 	}
 
 	@Override
-	public Comp_Assign_Eng getCompDetails(int compid,Employee emp) {
+	public Comp_Assign_Eng getCompDetails(int compid,Employee emp) throws ComplainException {
 		 Comp_Assign_Eng coe = null;
 		 
 		 try(Connection conn = DBUtil.provideConnection()) {
@@ -79,13 +81,13 @@ public class EmployeeImpl implements Employeedoa{
 				coe = new Comp_Assign_Eng(cid,status,des,category,username);
 				
 			}else {
-				System.out.println("No Engineer Assigned Yet ");
+				throw new ComplainException("No Engineer Assigned Yet");
 			}
 			
 			
 		} catch (SQLException e) {
 		  
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		 
 		 
@@ -94,7 +96,7 @@ public class EmployeeImpl implements Employeedoa{
 	}
 
 	@Override
-	public List<Complain> getYourCompHistory(Employee emp) {
+	public List<Complain> getYourCompHistory(Employee emp) throws ComplainException {
 		 
 		List<Complain> complist = new ArrayList<>();
 		
@@ -104,7 +106,10 @@ public class EmployeeImpl implements Employeedoa{
 			
 			ResultSet rs=  ps.executeQuery();
 			
+			boolean flag=true;
+			
 			while(rs.next()) {
+				flag=false;
 				int cid=rs.getInt(1);
 				String status = rs.getString(2);
 				String des = rs.getString(3);
@@ -115,6 +120,9 @@ public class EmployeeImpl implements Employeedoa{
 				complist.add(comp);
 				
 			}
+			if(flag) {
+				throw new ComplainException("Complain History Not Found ");
+			}
 			
 			
 		
@@ -122,7 +130,7 @@ public class EmployeeImpl implements Employeedoa{
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		
@@ -132,7 +140,7 @@ public class EmployeeImpl implements Employeedoa{
 	}
 
 	@Override
-	public String changePass(String newPass,Employee emp) {
+	public String changePass(String newPass,Employee emp) throws EmployeeException {
 		String msg="password not updated ";
 		
 	try (Connection conn = DBUtil.provideConnection()){
@@ -143,9 +151,12 @@ public class EmployeeImpl implements Employeedoa{
 			
 			int x = ps.executeUpdate();
 			if(x>0) msg="Password Updated Successfully ";
+			else {
+				throw new EmployeeException("Password Updation Failed ");
+			}
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EmployeeException(e.getMessage());
 		}
 		
 		
