@@ -46,4 +46,35 @@ employee must report to this department. Engineers from this department take car
 -	Employee can change his/her password.
 
 
+- **HOME SCREEN**
+
+![HomeScreen](https://i.postimg.cc/MKjGYNNP/homescreen.jpg)
+  
+- **HOD HomePage**
+
+![HODHomeScreen](https://i.postimg.cc/rs92hGGp/hod-homescreen.jpg)
+
+
+- **Engineer HomePage**
+
+![ENGHomeScreen](https://i.postimg.cc/25BRpNdM/engineers-homepage.jpg)
+
+
+- **Employee HomePage**
+
+![EMPHomeScreen](https://i.postimg.cc/J0xS3rmD/employee-homepage.jpg)
+
+
+- **Exceptions**
+
+![EMPHomeScreen](https://i.postimg.cc/13hD0pCF/raising-exception-invalid-details.jpg)
+
+
+- **Complain History**
+
+![EMPHomeScreen](https://i.postimg.cc/LsskhmQQ/complain-history.jpg)
+
+
+
+
 
