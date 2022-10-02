@@ -17,9 +17,10 @@ employee must report to this department. Engineers from this department take car
 
 </p>
 
+---
+<h3> Tech-Stack : Java  &  MySQL </h3>
 
-
-
+---
 **Roles for the HOD:**
 -	Login into the system 
 - Register a new Engineer with a username(email) and password and the category (Hardware/software)
