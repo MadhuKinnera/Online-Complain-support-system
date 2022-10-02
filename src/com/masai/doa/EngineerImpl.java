@@ -9,12 +9,14 @@ import java.util.List;
 
 import com.masai.bean.Complain;
 import com.masai.bean.Engineer;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EngineerException;
 import com.masai.utility.DBUtil;
 
 public class EngineerImpl implements Engineerdoa {
 
 	@Override
-	public List<Complain> getCompsOfYou(Engineer eng) {
+	public List<Complain> getCompsOfYou(Engineer eng) throws ComplainException {
 		List<Complain> complist = new ArrayList<>();
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -25,7 +27,10 @@ public class EngineerImpl implements Engineerdoa {
 			
 			ResultSet rs =  ps.executeQuery();
 			
+			boolean flag=true;
+			
 			while(rs.next()) {	
+				flag=false;
 				int cid = rs.getInt("c.cid");
 				String status = rs.getString("c.status");
 				String des = rs.getString("c.des");
@@ -34,10 +39,13 @@ public class EngineerImpl implements Engineerdoa {
 				Complain comp = new Complain(cid,status,des,category,emp_username);
 				complist.add(comp);
 			}
+			if(flag) {
+			  throw new ComplainException("No Complains Found ");
+			}
 		    
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		
@@ -47,7 +55,7 @@ public class EngineerImpl implements Engineerdoa {
 	}
 
 	@Override
-	public String updateCompStatus(int compid ,String status,Engineer eng) {
+	public String updateCompStatus(int compid ,String status,Engineer eng) throws ComplainException {
 		String msg="not updated ";
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -62,18 +70,21 @@ public class EngineerImpl implements Engineerdoa {
 			
 			int x =ps.executeUpdate();
 			if(x>0) msg="status updated successfully ";
+			else {
+				throw new ComplainException("Complain Updation Failed ");
+			}
 			
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		return msg;
 	}
 
 	@Override
-	public List<Complain> getCompHistory(Engineer eng) {
+	public List<Complain> getCompHistory(Engineer eng) throws ComplainException{
 		List<Complain> complist = new ArrayList<>();
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -85,7 +96,10 @@ public class EngineerImpl implements Engineerdoa {
 			ps.setString(1,eng.getUsername());
 			ResultSet rs =  ps.executeQuery();
 			
+			boolean flag=true;
+			
 			while(rs.next()) {
+				flag=false;
 				int cid = rs.getInt(1);
 				String status = rs.getString(2);
 				String des = rs.getString(3);
@@ -97,8 +111,12 @@ public class EngineerImpl implements Engineerdoa {
 				
 			}
 			
+			if(flag) {
+				throw new ComplainException("Complain Not History Found ");
+			}
+			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ComplainException(e.getMessage());
 		}
 		
 		
@@ -108,7 +126,7 @@ public class EngineerImpl implements Engineerdoa {
 	}
 
 	@Override
-	public String changePass(String newPass,Engineer eng) {
+	public String changePass(String newPass,Engineer eng) throws EngineerException {
 		String msg = "password not updated ";
 		
 		try (Connection conn = DBUtil.provideConnection()){
@@ -119,9 +137,12 @@ public class EngineerImpl implements Engineerdoa {
 			
 			int x = ps.executeUpdate();
 			if(x>0) msg="Password Updated Successfully ";
+			else {
+				throw new EngineerException("Engineer Password Updation Failed ");
+			}
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EngineerException(e.getMessage());
 		}
 		
 		

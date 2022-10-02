@@ -9,11 +9,13 @@ import java.util.List;
 import com.masai.bean.Comp_Assign_Eng;
 import com.masai.bean.Complain;
 import com.masai.bean.Employee;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EmployeeException;
 import com.masai.utility.DBUtil;
 
 public interface Employeedoa {
 	
-	public static Employee checkEmployee(String username , String password) {
+	public static Employee checkEmployee(String username , String password)throws EmployeeException {
 		String msg = "EMPLOYEE NOT FOUND ";
 		Employee emp = null;
 		int flag=0;
@@ -31,12 +33,15 @@ public interface Employeedoa {
 			 if(rs.next()) {
 				 msg="Employee Login Suceessful";
 				 flag=1;
+			 }else {
+				 throw new EmployeeException("Invalid Employee Details ");
 			 }
 			  
 			
 		} catch (SQLException e) {
-			// TODO: handle exception
+			throw new EmployeeException(e.getMessage());
 		}
+		
 		if(flag==1)
 		 emp = new Employee(username,password);
 		
@@ -44,7 +49,7 @@ public interface Employeedoa {
 		return emp;
 	}
 	
-	public static String regEmployee(String username, String password) {
+	public static String regEmployee(String username, String password) throws EmployeeException {
 		String msg = "Technical Error Registration Failed ";
 		
 		try(Connection conn = DBUtil.provideConnection()) {
@@ -56,12 +61,15 @@ public interface Employeedoa {
 			
 			int x = ps.executeUpdate();
 			if(x>0) msg="Employee Registration successful";
+			else {
+				throw new EmployeeException("Employee Registration Failed ");
+			}
 			
 			
 			
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new EmployeeException(e.getMessage());
 		}
 		
 		
@@ -69,12 +77,12 @@ public interface Employeedoa {
 	}
 	
 	
-	public String regAComp(String status,String des, String category,Employee emp);
+	public String regAComp(String status,String des, String category,Employee emp) throws ComplainException;
 	
-	public Comp_Assign_Eng getCompDetails(int compid,Employee emp);
+	public Comp_Assign_Eng getCompDetails(int compid,Employee emp) throws ComplainException;
 	
-	public List<Complain> getYourCompHistory(Employee emp);
+	public List<Complain> getYourCompHistory(Employee emp) throws ComplainException;
 	
-	public String changePass(String newPass,Employee emp);
+	public String changePass(String newPass,Employee emp) throws EmployeeException;
 
 }

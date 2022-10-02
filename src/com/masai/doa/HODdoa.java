@@ -9,11 +9,14 @@ import java.util.List;
 import com.masai.bean.Complain;
 import com.masai.bean.Engineer;
 import com.masai.bean.HOD;
+import com.masai.exception.ComplainException;
+import com.masai.exception.EngineerException;
+import com.masai.exception.HODException;
 import com.masai.utility.DBUtil;
 
 public interface HODdoa {
 	
-	public static HOD checkHOD(String username ,String password) {
+	public static HOD checkHOD(String username ,String password)throws HODException {
 		String msg = "ADMIN NOT FOUND ";
 		HOD hod = null;
 		int flag=0;
@@ -26,10 +29,12 @@ public interface HODdoa {
 			if(rs.next()) {
 				flag=1;
 				msg="HOD Login Successful";
+			}else {
+				throw new HODException("invalid Username or Password ");
 			}
 		
 		}catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new HODException(e.getMessage());
 		}
 		
 		if(flag==1)
@@ -43,12 +48,12 @@ public interface HODdoa {
 	
 	
 	
-	public List<Engineer> getAllEng();
+	public List<Engineer> getAllEng() throws EngineerException;
 	
-	public String deleteAnEng(String username);
+	public String deleteAnEng(String username) throws EngineerException;
 	
-	public List<Complain> getAllComp();
+	public List<Complain> getAllComp() throws ComplainException;
 	
-	public String assignCompToEng(int compid,String eng_username);
+	public String assignCompToEng(int compid,String eng_username) throws ComplainException;
 	
 }
