@@ -24,7 +24,7 @@ employee must report to this department. Engineers from this department take car
 ---
 **Roles for the HOD:**
 -	Login into the system 
-- Register a new Engineer with a username(email) and password and the category (Hardware/software)
+- Register a new Engineer with a username(email) and password 
 -	Can see List of all the Registered Engineers.
 -	Can Delete any Engineers from the system
 -	Can able to see all the raised problem.
