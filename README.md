@@ -13,7 +13,7 @@ Factors to consider include cost of downtime, skills, retention, overheads, cust
 <p>
 Employees of the organization uses IT based hardware for their daily work. If by some reason, these hardware goes down it is very
 important to take care of these hardware and in case of fault , that should be repaired in priority basis. To maintain and support these
-hardwares there exists a separate department, generally known as “SYSTEM ENGINEERS DEPARTMENT” . For any problem, concerned
+hardwares there exists a separate department, generally known as “SYSTEM ENGINEERS DEPARTMENT”. For any problem, concerned
 employee must report to this department. Engineers from this department take care of the problem.
 
 </p>
